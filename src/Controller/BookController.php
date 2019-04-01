@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +18,15 @@ class BookController extends AbstractController
     /**
      * @Route("/book", name="book_get_all", methods={"GET"})
      */
-    public function getBooks()
+    public function getBooks(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
+
+        $books = $entityManager->getRepository(Book::class)->findAll();
+
+        $json = $serializer->serialize($books, 'json', ['groups' => 'api']);
+
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
         ]);
     }
 
@@ -33,11 +36,6 @@ class BookController extends AbstractController
      */
     public function getBook(Book $book, SerializerInterface $serializer)
     {
-       // dd($book);
-        /*return $this->json([
-            'book' => $serializer->serialize($book, '', ['groups' => 'api']),
-            'path' => 'src/Controller/BookController.php',
-        ]);*/
 
         $json = $serializer->serialize($book, 'json', ['groups' => 'api']);
 
