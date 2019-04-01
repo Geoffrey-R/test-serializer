@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookController extends AbstractController
@@ -54,26 +55,12 @@ class BookController extends AbstractController
 
         $newObject  =  $serializer->deserialize($data, Book::class, 'json', ['groups' => 'api']);
 
+        /** @var ConstraintViolationList $errors */
         $errors = $validator->validate($newObject, null ,['groups' => 'api']);
 
         if (count($errors) > 0) {
-            /*
-             * Uses a __toString method on the $errors variable which is a
-             * ConstraintViolationList object. This gives us a nice string
-             * for debugging.
-             */
-          //  $errorsString = (string) $errors;
-            $jsonError = [];
-            foreach ($errors as  $error){
-                /** @var ConstraintViolation $error */
-                array_push($jsonError, [
-                    'message' => $error->getMessage(),
-                    'path' => $error->getPropertyPath(),
-                ]);
-            }
 
-
-            return new Response(json_encode($jsonError), 400);
+            return new Response($this->generateJsonErrors($errors), 400);
         }
 
 
@@ -103,6 +90,22 @@ class BookController extends AbstractController
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
         ]);
+    }
+
+
+    private function generateJsonErrors(ConstraintViolationList $errors)
+    {
+        $jsonError = [];
+        foreach ($errors as  $error){
+            /** @var ConstraintViolation $error */
+            array_push($jsonError, [
+                'message' => $error->getMessage(),
+                'path' => $error->getPropertyPath(),
+            ]);
+        }
+
+        return json_encode($jsonError);
+
     }
 
 }
