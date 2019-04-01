@@ -77,11 +77,19 @@ class BookController extends AbstractController
     /**
      * @Route("/book/{id}", name="book_update", methods={"PUT"})
      */
-    public function updateBook(Book $book, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function updateBook(Book $book, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
         $data = $request->getContent();
 
         $serializer->deserialize($data, Book::class, 'json',  ['object_to_populate' => $book, 'groups' => 'api']);
+
+        /** @var ConstraintViolationList $errors */
+        $errors = $validator->validate($book, null ,['groups' => 'api']);
+
+        if (count($errors) > 0) {
+
+            return new Response($this->generateJsonErrors($errors), 400);
+        }
 
         $entityManager->flush();
 
