@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookController extends AbstractController
 {
@@ -46,11 +47,27 @@ class BookController extends AbstractController
     /**
      * @Route("/book", name="book_create", methods={"POST"}, defaults={"_format"="json"})
      */
-    public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $data = $request->getContent();
 
         $newObject  =  $serializer->deserialize($data, Book::class, 'json', ['groups' => 'api']);
+
+        $errors = $validator->validate($newObject, null ,['groups' => 'api']);
+
+        if (count($errors) > 0) {
+            /*
+             * Uses a __toString method on the $errors variable which is a
+             * ConstraintViolationList object. This gives us a nice string
+             * for debugging.
+             */
+          //  $errorsString = (string) $errors;
+
+           dd($errors);
+
+            return new Response($errorsString);
+        }
+
 
         $entityManager->persist($newObject);
         $entityManager->flush();
