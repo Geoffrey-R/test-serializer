@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookController extends AbstractController
@@ -62,10 +63,17 @@ class BookController extends AbstractController
              * for debugging.
              */
           //  $errorsString = (string) $errors;
+            $jsonError = [];
+            foreach ($errors as  $error){
+                /** @var ConstraintViolation $error */
+                array_push($jsonError, [
+                    'message' => $error->getMessage(),
+                    'path' => $error->getPropertyPath(),
+                ]);
+            }
 
-           dd($errors);
 
-            return new Response($errorsString);
+            return new Response(json_encode($jsonError), 400);
         }
 
 
