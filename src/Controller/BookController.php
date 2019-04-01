@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,29 +46,37 @@ class BookController extends AbstractController
     /**
      * @Route("/book", name="book_create", methods={"POST"}, defaults={"_format"="json"})
      */
-    public function createBook(Request $request)
+    public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
+        $data = $request->getContent();
 
-        //dd(json_decode($request->getContent(), true));
+        $newObject  =  $serializer->deserialize($data, Book::class, 'json', ['groups' => 'api']);
 
-        $data = $request->request->get('data');
+        $entityManager->persist($newObject);
+        $entityManager->flush();
 
-        dd($data);
+        $json = $serializer->serialize($newObject, 'json', ['groups' => 'api']);
 
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
         ]);
     }
 
     /**
      * @Route("/book/{id}", name="book_update", methods={"PUT"})
      */
-    public function updateBook()
+    public function updateBook(Book $book, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
+        $data = $request->getContent();
+
+        $serializer->deserialize($data, Book::class, 'json',  ['object_to_populate' => $book, 'groups' => 'api']);
+
+        $entityManager->flush();
+
+        $json = $serializer->serialize($book, 'json', ['groups' => 'api']);
+
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
         ]);
     }
 
