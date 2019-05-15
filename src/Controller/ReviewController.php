@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Book;
 use App\Entity\Review;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ReviewController extends AbstractController
 {
     /**
-     * @Route("/review", name=review_get_all", methods={"GET"})
+     * @Route("/review", name="review_get_all", methods={"GET"})
      */
     public function getReviews(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
@@ -46,16 +45,16 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("/review", name=review_create", methods={"POST"}, defaults={"_format"="json"})
+     * @Route("/review", name="review_create", methods={"POST"}, defaults={"_format"="json"})
      */
     public function createReview(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $data = $request->getContent();
 
-        $newObject  =  $serializer->deserialize($data, Review::class, 'json', ['groups' => 'api']);
+        $newObject  =  $serializer->deserialize($data, Review::class, 'json');
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($newObject, null ,['groups' => 'api']);
+        $errors = $validator->validate($newObject, null ,['groups' => 'review', ]);
 
         if (count($errors) > 0) {
 
@@ -66,7 +65,7 @@ class ReviewController extends AbstractController
         $entityManager->persist($newObject);
         $entityManager->flush();
 
-        $json = $serializer->serialize($newObject, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($newObject, 'json', ['groups' => 'review']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
