@@ -11,7 +11,7 @@ class CustomCategoryProvider extends BaseProvider
 
         $categoryArray = ['Roman', 'Policier', 'Science-fiction', 'Nouvelles', 'Contes', 'Poésie', 'Philosophie',
             'Psychologie', 'Biologie', 'Manga', 'Bande Déssinée', 'Comics'];
-        
+
         return $categoryArray[array_rand($categoryArray, 1)];
     }
 

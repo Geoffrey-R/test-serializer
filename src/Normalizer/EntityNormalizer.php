@@ -57,7 +57,7 @@ class EntityNormalizer extends ObjectNormalizer
 
             //TODO 'better prod message'
             //{$emailFirstname}.{$emailLastname}@{$domain}
-            throw new NotFoundHttpException($class.' '.$data.' not found');
+            throw new NotFoundHttpException("$class $data not found");
         }
 
         return $obj;
