@@ -36,7 +36,7 @@ class AuthorController extends AbstractController
     public function getAuthor(Author $author, SerializerInterface $serializer)
     {
 
-        $json = $serializer->serialize($author, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($author, 'json', ['groups' => 'author']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -50,10 +50,10 @@ class AuthorController extends AbstractController
     {
         $data = $request->getContent();
 
-        $newObject  =  $serializer->deserialize($data, Author::class, 'json', ['groups' => 'api']);
+        $newObject  =  $serializer->deserialize($data, Author::class, 'json', ['groups' => 'author']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($newObject, null ,['groups' => 'api']);
+        $errors = $validator->validate($newObject, null ,['groups' => 'author_validation']);
 
         if (count($errors) > 0) {
 
@@ -64,7 +64,7 @@ class AuthorController extends AbstractController
         $entityManager->persist($newObject);
         $entityManager->flush();
 
-        $json = $serializer->serialize($newObject, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($newObject, 'json', ['groups' => 'author']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -72,16 +72,16 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/author/{id}", name="book_update", methods={"PUT"})
+     * @Route("/author/{id}", name="author_update", methods={"PUT"})
      */
-    public function updateBook(Author $author, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    public function updateAuthor(Author $author, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
         $data = $request->getContent();
 
-        $serializer->deserialize($data, Author::class, 'json',  ['object_to_populate' => $author, 'groups' => 'api']);
+        $serializer->deserialize($data, Author::class, 'json',  ['object_to_populate' => $author, 'groups' => 'author']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($author, null ,['groups' => 'api']);
+        $errors = $validator->validate($author, null ,['groups' => 'author_validation']);
 
         if (count($errors) > 0) {
 
@@ -90,7 +90,7 @@ class AuthorController extends AbstractController
 
         $entityManager->flush();
 
-        $json = $serializer->serialize($author, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($author, 'json', ['groups' => 'author']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',

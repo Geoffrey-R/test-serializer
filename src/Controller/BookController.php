@@ -23,7 +23,7 @@ class BookController extends AbstractController
 
         $books = $entityManager->getRepository(Book::class)->findAll();
 
-        $json = $serializer->serialize($books, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($books, 'json', ['groups' => 'book']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -37,7 +37,7 @@ class BookController extends AbstractController
     public function getBook(Book $book, SerializerInterface $serializer)
     {
 
-        $json = $serializer->serialize($book, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($book, 'json', ['groups' => 'book']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -51,10 +51,10 @@ class BookController extends AbstractController
     {
         $data = $request->getContent();
 
-        $newObject  =  $serializer->deserialize($data, Book::class, 'json', ['groups' => 'api']);
+        $newObject  =  $serializer->deserialize($data, Book::class, 'json', ['groups' => 'book']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($newObject, null ,['groups' => 'api']);
+        $errors = $validator->validate($newObject, null ,['groups' => 'book_validation']);
 
         if (count($errors) > 0) {
 
@@ -65,7 +65,7 @@ class BookController extends AbstractController
         $entityManager->persist($newObject);
         $entityManager->flush();
 
-        $json = $serializer->serialize($newObject, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($newObject, 'json', ['groups' => 'book']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -79,10 +79,10 @@ class BookController extends AbstractController
     {
         $data = $request->getContent();
 
-        $serializer->deserialize($data, Book::class, 'json',  ['object_to_populate' => $book, 'groups' => 'api']);
+        $serializer->deserialize($data, Book::class, 'json',  ['object_to_populate' => $book, 'groups' => 'book']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($book, null ,['groups' => 'api']);
+        $errors = $validator->validate($book, null ,['groups' => 'book_validation']);
 
         if (count($errors) > 0) {
 
@@ -91,7 +91,7 @@ class BookController extends AbstractController
 
         $entityManager->flush();
 
-        $json = $serializer->serialize($book, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($book, 'json', ['groups' => 'book']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
