@@ -2,6 +2,7 @@
 
 namespace App\Normalizer;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
@@ -49,6 +50,16 @@ class EntityNormalizer extends ObjectNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        return $this->em->find($class, $data);
+
+        $obj = $this->em->find($class, $data);
+
+        if ($obj === null){
+
+            //TODO 'better prod message'
+            //{$emailFirstname}.{$emailLastname}@{$domain}
+            throw new NotFoundHttpException($class.' '.$data.' not found');
+        }
+
+        return $obj;
     }
 }

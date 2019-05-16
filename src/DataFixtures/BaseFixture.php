@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Faker\Provider\fr_FR\Company;
-use App\DataFixtures\Faker\Provider\CustomProvider;
+use App\DataFixtures\Faker\Provider\CustomCategoryProvider;
 
 
 abstract class BaseFixture extends Fixture
@@ -27,7 +27,7 @@ abstract class BaseFixture extends Fixture
         $this->manager = $manager;
         $this->faker = Factory::create('fr_FR');
         $this->faker->addProvider(new Company($this->faker));
-        $this->faker->addProvider(new CustomProvider($this->faker));
+        $this->faker->addProvider(new CustomCategoryProvider($this->faker));
 
         $this->loadData($manager);
     }

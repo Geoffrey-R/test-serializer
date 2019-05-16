@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
@@ -37,12 +39,6 @@ class Author
      * @Groups({"author"})
      */
     private $email;
-
-    /**
-     * @ORM\Column(type="float")
-     * @Groups({"author"})
-     */
-    private $rating;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Category", inversedBy="author", cascade={"persist", "remove"})
