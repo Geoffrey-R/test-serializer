@@ -22,7 +22,7 @@ class AuthorController extends AbstractController
     {
         $books = $entityManager->getRepository(Author::class)->findAll();
 
-        $json = $serializer->serialize($books, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($books, 'json', ['groups' => 'author']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',

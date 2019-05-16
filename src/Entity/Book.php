@@ -18,13 +18,13 @@ class Book
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"api"})
+     * @Groups({"api", "author"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
+     * @Groups({"api", "author"})
      * @Assert\Length(
      *      min = 2,
      *      max = 50,
@@ -50,17 +50,19 @@ class Book
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Groups({"api", "author"})
      */
     private $isbn;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"api"})
+     * @Groups({"api", "author"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"api", "author"})
      */
     private $publicationDate;
 
