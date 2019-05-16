@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
@@ -15,21 +16,25 @@ class Author
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"author"})
      */
     private $id;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Book", inversedBy="authors")
+     * @Groups({"author"})
      */
     private $books;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"author"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"author"})
      */
     private $email;
     
