@@ -36,19 +36,6 @@ class Book
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Your first name must be at least {{ limit }} characters long",
-     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
-     *      groups={"api"}
-     * )
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $isbn;
@@ -94,18 +81,6 @@ class Book
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }
@@ -190,26 +165,26 @@ class Book
     /**
      * @return Collection|Author[]
      */
-    public function getY(): Collection
+    public function getAuthors(): Collection
     {
-        return $this->y;
+        return $this->authors;
     }
 
-    public function addY(Author $y): self
+    public function addAuthor(Author $author): self
     {
-        if (!$this->y->contains($y)) {
-            $this->y[] = $y;
-            $y->addBook($this);
+        if (!$this->authors->contains($author)) {
+            $this->authors[] = $author;
+            $author->addBook($this);
         }
 
         return $this;
     }
 
-    public function removeY(Author $y): self
+    public function removeAuthor(Author $author): self
     {
-        if ($this->y->contains($y)) {
-            $this->y->removeElement($y);
-            $y->removeBook($this);
+        if ($this->authors->contains($author)) {
+            $this->authors->removeElement($author);
+            $author->removeBook($this);
         }
 
         return $this;

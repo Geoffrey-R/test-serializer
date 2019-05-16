@@ -20,7 +20,7 @@ class ReviewFixture extends BaseFixture implements DependentFixtureInterface
 
     protected function loadData(ObjectManager $om)
     {
-        $this->createMany(Review::class, '', 10, function(Review $review, int $count) {
+        $this->createMany(Review::class, '', 100, function(Review $review, int $count) {
 
             $book = $this->getReference(self::getRefName(Book::class, '') . '_' . $count);
 

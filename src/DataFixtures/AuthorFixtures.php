@@ -22,7 +22,7 @@ class AuthorFixtures extends BaseFixture implements DependentFixtureInterface
 
     protected function loadData(ObjectManager $om)
     {
-        $this->createMany(Author::class, '', 10, function(Author $author, int $count) {
+        $this->createMany(Author::class, '', 100, function(Author $author, int $count) {
 
             /** @var Book $book */
             $book = $this->getRandomReference(self::getRefName(Book::class, ''));
