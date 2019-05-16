@@ -24,7 +24,7 @@ class BookController extends AbstractController
         $books = $entityManager->getRepository(Book::class)->findAll();
 
         $json = $serializer->serialize($books, 'json', ['groups' => 'api']);
-        
+
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
         ]);

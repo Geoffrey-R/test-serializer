@@ -49,10 +49,20 @@ class Book
     private $author;
 
     /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $isbn;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"api"})
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $publicationDate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="book")
@@ -93,6 +103,22 @@ class Book
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIsbn()
+    {
+        return $this->isbn;
+    }
+
+
+    public function setIsbn($isbn): self
+    {
+        $this->isbn = $isbn;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -101,6 +127,24 @@ class Book
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPublicationDate()
+    {
+        return $this->publicationDate;
+    }
+
+    /**
+     * @param mixed $publicationDate
+     */
+    public function setPublicationDate($publicationDate): self
+    {
+        $this->publicationDate = $publicationDate;
 
         return $this;
     }
@@ -135,4 +179,5 @@ class Book
 
         return $this;
     }
+
 }
