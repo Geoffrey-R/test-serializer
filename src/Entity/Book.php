@@ -66,12 +66,19 @@ class Book
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="book")
+     * @Groups({"api"})
      */
     private $reviews;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="books")
+     */
+    private $authors;
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
+        $this->y = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,6 +182,34 @@ class Book
             if ($review->getBook() === $this) {
                 $review->setBook(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Author[]
+     */
+    public function getY(): Collection
+    {
+        return $this->y;
+    }
+
+    public function addY(Author $y): self
+    {
+        if (!$this->y->contains($y)) {
+            $this->y[] = $y;
+            $y->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeY(Author $y): self
+    {
+        if ($this->y->contains($y)) {
+            $this->y->removeElement($y);
+            $y->removeBook($this);
         }
 
         return $this;

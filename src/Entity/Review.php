@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReviewRepository")
@@ -13,6 +14,7 @@ class Review
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"api"})
      */
     private $id;
 
@@ -23,11 +25,13 @@ class Review
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $author;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"api"})
      */
     private $rating;
 
@@ -38,6 +42,7 @@ class Review
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $body;
 
