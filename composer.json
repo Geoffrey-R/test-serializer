@@ -17,13 +17,13 @@
         "symfony/serializer": "4.2.*",
         "symfony/serializer-pack": "^1.0",
         "symfony/validator": "4.2.*",
+        "symfony/var-dumper": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
   "require-dev": {
     "fzaninotto/faker": "^1.8",
     "doctrine/doctrine-fixtures-bundle": "^3.0",
-    "symfony/maker-bundle": "^1.11",
-    "symfony/var-dumper": "4.2.*"
+    "symfony/maker-bundle": "^1.11"
   },
     "config": {
         "preferred-install": {

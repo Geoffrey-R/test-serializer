@@ -37,6 +37,18 @@ class Author
      * @Groups({"author"})
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"author"})
+     */
+    private $rating;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Category", inversedBy="author", cascade={"persist", "remove"})
+     * @Groups({"author"})
+     */
+    private $category;
     
 
     public function __construct()
@@ -47,6 +59,22 @@ class Author
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param mixed $rating
+     */
+    public function setRating($rating): void
+    {
+        $this->rating = $rating;
     }
 
     /**
@@ -95,6 +123,18 @@ class Author
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
