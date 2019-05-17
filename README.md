@@ -46,7 +46,7 @@ Sending a POST request on `/books` with the following body:
 }
 ```
 
-The denormalizer then replaces the identifiers with the corresponding entities by requesting doctrine, in response we 
+The denormalizer then replaces the authors identifiers with the corresponding entities by requesting doctrine, in response we 
 get the persisted book serialized in json:
 
 ```json
