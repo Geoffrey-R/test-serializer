@@ -18,7 +18,7 @@ To install the application dependencies, run the command below:
 composer install
 ```
 
-To initialize the database, set the `DATABASE_URL` variable in the .env file with your database server URL, then run the following commands:
+To initialize the database, set the `DATABASE_URL` variable in the `.env` file with your database server URL, then run the following commands:
 
 ```
 php bin/console doctrine:database:create
@@ -35,7 +35,7 @@ php bin/console doctrine:fixtures:load
 Example
 -------
 
-Sending a POST request on `/books/1` with the following body:
+Sending a POST request on `/books` with the following body:
 
 ```json
 {
