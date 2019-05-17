@@ -13,10 +13,13 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthorController extends AbstractController
+/**
+ * @Route("/authors")
+ */
+class AuthorController extends BaseController
 {
     /**
-     * @Route("/author", name="author_get_all", methods={"GET"})
+     * @Route("/", name="author_get_all", methods={"GET"})
      */
     public function getAuthors(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
@@ -31,7 +34,7 @@ class AuthorController extends AbstractController
 
 
     /**
-     * @Route("/author/{id}", name="author_get", methods={"GET"})
+     * @Route("/{id}", name="author_get", methods={"GET"})
      */
     public function getAuthor(Author $author, SerializerInterface $serializer)
     {
@@ -44,9 +47,9 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/author", name="author_create", methods={"POST"}, defaults={"_format"="json"})
+     * @Route("", name="author_create", methods={"POST"}, defaults={"_format"="json"})
      */
-    public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function createAuthor(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $data = $request->getContent();
 
@@ -72,7 +75,7 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/author/{id}", name="author_update", methods={"PUT"})
+     * @Route("/{id}", name="author_update", methods={"PUT"})
      */
     public function updateAuthor(Author $author, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
@@ -97,19 +100,4 @@ class AuthorController extends AbstractController
         ]);
     }
 
-
-    private function generateJsonErrors(ConstraintViolationList $errors)
-    {
-        $jsonError = [];
-        foreach ($errors as  $error){
-            /** @var ConstraintViolation $error */
-            array_push($jsonError, [
-                'message' => $error->getMessage(),
-                'path' => $error->getPropertyPath(),
-            ]);
-        }
-
-        return json_encode($jsonError);
-
-    }
 }

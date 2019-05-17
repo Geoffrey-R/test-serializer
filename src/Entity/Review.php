@@ -14,24 +14,25 @@ class Review
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"api"})
+     * @Groups({"review", "author", "book"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\book", inversedBy="reviews")
+     * @Groups({"review"})
      */
     private $book;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
+     * @Groups({"review", "book"})
      */
     private $author;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"api"})
+     * @Groups({"review", "author", "book"})
      */
     private $rating;
 
@@ -42,7 +43,7 @@ class Review
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
+     * @Groups({"review", "author", "book"})
      */
     private $body;
 

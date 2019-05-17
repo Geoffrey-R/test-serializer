@@ -13,17 +13,20 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ReviewController extends AbstractController
+/**
+ * @Route("/reviews")
+ */
+class ReviewController extends BaseController
 {
     /**
-     * @Route("/review", name="review_get_all", methods={"GET"})
+     * @Route("", name="review_get_all", methods={"GET"})
      */
     public function getReviews(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
 
         $reviews = $entityManager->getRepository(Review::class)->findAll();
 
-        $json = $serializer->serialize($reviews, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($reviews, 'json', ['groups' => 'review']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -32,12 +35,12 @@ class ReviewController extends AbstractController
 
 
     /**
-     * @Route("/review/{id}", name="review_get", methods={"GET"})
+     * @Route("/{id}", name="review_get", methods={"GET"})
      */
-    public function getBook(Review $review, SerializerInterface $serializer)
+    public function getReview(Review $review, SerializerInterface $serializer)
     {
 
-        $json = $serializer->serialize($review, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($review, 'json', ['groups' => 'review']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
@@ -45,16 +48,16 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("/review", name="review_create", methods={"POST"}, defaults={"_format"="json"})
+     * @Route("", name="review_create", methods={"POST"}, defaults={"_format"="json"})
      */
     public function createReview(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $data = $request->getContent();
 
-        $newObject  =  $serializer->deserialize($data, Review::class, 'json');
+        $newObject  =  $serializer->deserialize($data, Review::class, 'json', ['groups' => 'review']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($newObject, null ,['groups' => 'review', ]);
+        $errors = $validator->validate($newObject, null ,['groups' => 'review_validation', ]);
 
         if (count($errors) > 0) {
 
@@ -73,45 +76,28 @@ class ReviewController extends AbstractController
     }
 
     /**
-     * @Route("/review/{id}", name="review_update", methods={"PUT"})
+     * @Route("/{id}", name="review_update", methods={"PUT"})
      */
     public function updateReview(Review $review, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
         $data = $request->getContent();
 
-        $serializer->deserialize($data, Review::class, 'json',  ['object_to_populate' => $review, 'groups' => 'api']);
+        $serializer->deserialize($data, Review::class, 'json',  ['object_to_populate' => $review, 'groups' => 'review']);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($review, null ,['groups' => 'api']);
+        $errors = $validator->validate($review, null ,['groups' => 'review_validation']);
 
         if (count($errors) > 0) {
-
             return new Response($this->generateJsonErrors($errors), 400);
         }
 
         $entityManager->flush();
 
-        $json = $serializer->serialize($review, 'json', ['groups' => 'api']);
+        $json = $serializer->serialize($review, 'json', ['groups' => 'review']);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
         ]);
-    }
-
-
-    private function generateJsonErrors(ConstraintViolationList $errors)
-    {
-        $jsonError = [];
-        foreach ($errors as  $error){
-            /** @var ConstraintViolation $error */
-            array_push($jsonError, [
-                'message' => $error->getMessage(),
-                'path' => $error->getPropertyPath(),
-            ]);
-        }
-
-        return json_encode($jsonError);
-
     }
 
 }

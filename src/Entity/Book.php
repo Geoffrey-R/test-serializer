@@ -18,56 +18,56 @@ class Book
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"api", "author"})
+     * @Groups({"author", "book", "review"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api", "author"})
+     * @Groups({"author", "book", "review"})
      * @Assert\Length(
      *      min = 2,
      *      max = 50,
      *      minMessage = "Your first name must be at least {{ limit }} characters long",
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
-     *      groups={"api"}
+     *      groups={"book_validation"}
      * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
-     * @Groups({"api", "author"})
+     * @Groups({"author", "book", "review"})
      */
     private $isbn;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"api", "author"})
+     * @Groups({"author", "book", "review"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"api", "author"})
      */
     private $publicationDate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="book")
-     * @Groups({"api"})
+     * @Groups({"book", "author"})
      */
     private $reviews;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="books")
+     * @Groups({"book", "review"})
      */
     private $authors;
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
-        $this->y = new ArrayCollection();
+        $this->authors = new ArrayCollection();
     }
 
     public function getId(): ?int

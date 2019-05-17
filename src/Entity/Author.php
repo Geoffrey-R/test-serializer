@@ -18,7 +18,7 @@ class Author
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"author"})
+     * @Groups({"author", "review", "category", "book"})
      */
     private $id;
 
@@ -30,19 +30,19 @@ class Author
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"author"})
+     * @Groups({"author", "review", "category", "book"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"author"})
+     * @Groups({"author", "review"})
      */
     private $email;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Category", inversedBy="author", cascade={"persist", "remove"})
-     * @Groups({"author"})
+     * @Groups({"author", "review"})
      */
     private $category;
     

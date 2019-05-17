@@ -14,18 +14,19 @@ class Category
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"author"})
+     * @Groups({"category", "author"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"author"})
+     * @Groups({"category", "author"})
      */
     private $name;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Author", mappedBy="category", cascade={"persist", "remove"})
+     * @Groups({"category"})
      */
     private $author;
 

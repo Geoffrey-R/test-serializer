@@ -13,10 +13,13 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class BookController extends AbstractController
+/**
+ * @Route("/books")
+ */
+class BookController extends BaseController
 {
     /**
-     * @Route("/book", name="book_get_all", methods={"GET"})
+     * @Route("", name="book_get_all", methods={"GET"})
      */
     public function getBooks(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
@@ -32,7 +35,7 @@ class BookController extends AbstractController
 
 
     /**
-     * @Route("/book/{id}", name="book_get", methods={"GET"})
+     * @Route("/{id}", name="book_get", methods={"GET"})
      */
     public function getBook(Book $book, SerializerInterface $serializer)
     {
@@ -45,7 +48,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/book", name="book_create", methods={"POST"}, defaults={"_format"="json"})
+     * @Route("", name="book_create", methods={"POST"}, defaults={"_format"="json"})
      */
     public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
@@ -73,7 +76,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/book/{id}", name="book_update", methods={"PUT"})
+     * @Route("/{id}", name="book_update", methods={"PUT"})
      */
     public function updateBook(Book $book, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
@@ -96,22 +99,6 @@ class BookController extends AbstractController
         return new Response($json, 200, [
             'Content-Type' => 'application/json',
         ]);
-    }
-
-
-    private function generateJsonErrors(ConstraintViolationList $errors)
-    {
-        $jsonError = [];
-        foreach ($errors as  $error){
-            /** @var ConstraintViolation $error */
-            array_push($jsonError, [
-                'message' => $error->getMessage(),
-                'path' => $error->getPropertyPath(),
-            ]);
-        }
-
-        return json_encode($jsonError);
-
     }
 
 }
